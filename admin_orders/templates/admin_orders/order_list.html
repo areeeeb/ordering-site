@@ -1,0 +1,157 @@
+{% load static %}
+
+<!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="{% static 'ordering system/materialize/css/materialize.min.css' %}" media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            @keyframes expand {
+              from {
+                transform: scale(0);
+                opacity: 0;
+                background: #5470B0;
+              }
+            }
+            @keyframes slide-up {
+                0% {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            .white-font {
+                color: white;
+            }
+            .card-animation {
+                animation: expand .5s ease;
+            }
+        </style>
+    </head>
+
+    <body>
+        <nav>
+            <div class="nav-wrapper red darken-2">
+                <a href="#" class="brand-logo">Logo</a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a href="#">refresh</a></li>
+                    <li><a href="#">logout</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="">
+            <div id="order-cards-list" class="row">
+
+                {% for order in orders %}
+                    <div class="col l3">
+                        <div class="card small">
+                            <div class="card-stacked">
+                                <div class="card-content" style="overflow-y: auto; height: 250px; padding: 1rem;">
+                                    <p class="right-align">{{ order.time }}</p>
+                                    <div class="orange darken-3 center-align white-font" style="font-weight: bold;">Not Confirmed</div>
+                                    <p style="white-space: pre-line">
+                                        {{ order.items }}
+                                    </p>
+                                    <div class="right-align"><p>TOTAL: {{order.amount}} Rs.</p></div>
+                                </div>
+                                <div class="card-action">
+                                    <a href="#">Mark Confirmed</a>
+                                    <a href="#">Mark Completed</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <div class="col l3">
+                    <div class="card small">
+                        <div class="card-stacked">
+                            <div class="card-content" style="overflow-y: auto; height: 250px; padding: 1rem;">
+                                <p class="right-align">11:30 pm</p>
+                                <div class="yellow darken-1 center-align" style="font-weight: bold;">Confirmed</div>
+                                <p>1x Large Chicken Tikka</p>
+                                <p>1x Regular Afghani</p>
+                                <p>2x Small Italian</p>
+                                <p>1x Small Arabian</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="#">Mark Confirmed</a>
+                                <a href="#">Mark Completed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col l3">
+                    <div class="card small">
+                        <div class="card-stacked">
+                            <div class="card-content" style="overflow-y: auto; height: 250px; padding: 1rem;">
+                                <p class="right-align">11:30 pm</p>
+                                <div class="green darken-1 center-align white-font" style="font-weight: bold;">Completed</div>
+                                <p>1x Small Arabian</p>
+                            </div>
+                            <div class="card-action">
+                                <a href="#">Mark Confirmed</a>
+                                <a href="#">Mark Completed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+      <!--JavaScript at end of body for optimized loading-->
+      <script type="text/javascript" src="{% static 'ordering system/materialize/js/materialize.min.js' %}"></script>
+    <script>
+        let webSocket = new WebSocket('ws://localhost:8000/ws/orders/');
+        webSocket.onopen = function(e) {
+            console.log('connection opened to websocket');
+        };
+        webSocket.onmessage = function (e) {
+            const order = JSON.parse(e.data)['order'];
+            {# TODO: RN doing nothing with instructions #}
+            let time = Date.parse(order.time);
+            createOrderCart(time.toString(), order.items, order.amount);
+        };
+        webSocket.onclose = function (e) {
+            console.log('connection closed');
+        };
+
+        function createOrderCart(time, items, amount) {
+            let cardHTML = `
+            <div class="col l3">
+                    <div class="card small card-animation">
+                        <div class="card-stacked">
+                            <div class="card-content" style="overflow-y: auto; height: 250px; padding: 1rem;">
+                                <p class="right-align">${time}</p>
+                                <div class="orange darken-3 center-align white-font" style="font-weight: bold;">Not Confirmed</div>
+                                <p style="white-space: pre-line">
+                                    ${items}
+                                </p>
+                                <div class="right-align"><p>TOTAL: ${amount} Rs.</p></div>
+                            </div>
+                            <div class="card-action">
+                                <a href="#">Mark Confirmed</a>
+                                <a href="#">Mark Completed</a>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            `;
+            let cardsListParent = document.getElementById('order-cards-list');
+            cardsListParent.insertAdjacentHTML('afterbegin', cardHTML);
+        }
+    </script>
+    </body>
+  </html>

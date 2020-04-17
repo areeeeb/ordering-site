@@ -1,0 +1,214 @@
+{% extends 'ordering_system/base.html' %}
+{% load static %}
+{% block content %}
+
+    <section class="bg-1 h-900x main-slider pos-relative">
+        <div class="triangle-up pos-bottom"></div>
+        <div class="container h-100">
+                <div class="dplay-tbl">
+                        <div class="dplay-tbl-cell center-text color-white">
+
+                                <h5><b>BEST IN TOWN</b></h5>
+                                <h1 class="mt-30 mb-15">Pizza & Pasta</h1>
+                                <h5><a href="{% url 'ordering-system-order-rest-view' %}" class="btn-primaryc plr-25"><b>SEE TODAYS MENU</b></a></h5>
+                        </div><!-- dplay-tbl-cell -->
+                </div><!-- dplay-tbl -->
+        </div><!-- container -->
+</section>
+
+
+<section class="story-area left-text center-sm-text pos-relative">
+{#        <div class="abs-tbl bg-2 w-20 z--1 dplay-md-none"></div>#}
+{#        <div class="abs-tbr bg-3 w-20 z--1 dplay-md-none"></div>#}
+        <div class="pos-top triangle-bottom"></div>
+        <div class="container">
+                <div class="heading">
+                        <img class="heading-img" src="{% static 'ordering system/images/heading_logo.png' %}" alt="">
+                        <h2>Our Menu</h2>
+                </div>
+
+                <div class="row">
+                    {% for pizza in pizzas %}
+                        <div class="col-lg-3 col-md-4  col-sm-6 ">
+                                <div class="center-text mb-30">
+                                        <div class="ïmg-200x mlr-auto pos-relative">
+                                                {% if pizza.speciality %}
+                                                    <h6  class="ribbon-cont"><div class="ribbon secondary"></div><b>SPECIALITY</b></h6>
+                                                {% endif %}
+                                                <img src="{{ pizza.image.url }}" alt="">
+                                        </div>
+                                        <h4 class="mt-20">{{ pizza.flavour }}</h4>
+                                        <h5 class="mt-5"><b>Rs.{{ pizza.small_price|floatformat:0 }}|{{ pizza.regular_price|floatformat:0 }}|{{ pizza.large_price|floatformat:0 }}</b></h5>
+                                        <div class="dropdown">
+                                                <button class="dropdown-toggle mt-20 btn-brdr-primary plr-25" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        BUY
+                                                </button>
+                                                <div class="dropdown-menu pizza_forms" aria-labelledby="dropdownMenuButton">
+                                                        <form id="myForm" class="m-2">
+                                                                <input type="radio" id="male" name="size" value="{{ pizza.id }}_small_{{ pizza.flavour }}_{{ pizza.small_price }}" required>
+                                                                <label for="male">Small | Rs.{{ pizza.small_price }}</label><br>
+                                                                <input type="radio" id="female" name="size" value="{{ pizza.id }}_regular_{{ pizza.flavour }}_{{ pizza.regular_price }}" required>
+                                                                <label for="female">Regular | Rs.{{ pizza.regular_price }}</label><br>
+                                                                <input type="radio" id="other" name="size" value="{{ pizza.id }}_large_{{ pizza.flavour }}_{{ pizza.large_price }}" required>
+                                                                <label for="other">Large | Rs.{{ pizza.large_price }}</label>
+                                                                <br>
+                                                                <button class="btn-brdr-primary plr-25">Add to cart</button>
+                                                        </form>
+                                                </div>
+                                        </div>
+                                </div><!--text-center-->
+                        </div><!-- col-md-3 -->
+                    {% endfor %}
+                </div><!-- row -->
+
+                <h6 class="center-text mt-40 mt-sm-20 mb-30"><a href="{% url 'ordering-system-cart' %}" class="btn-primaryc plr-25"><b>GO TO CART</b></a></h6>
+                <h6 class="center-text mt-40 mt-sm-20 mb-30"><a id="clear_cart" href="#" class="btn-brdr-primary plr-25"><b>CLEAR CART</b></a></h6>
+        </div><!-- container -->
+</section>
+
+
+{#<section class="story-area bg-seller color-white pos-relative">#}
+{#        <div class="pos-bottom triangle-up"></div>#}
+{#        <div class="pos-top triangle-bottom"></div>#}
+{#        <div class="container">#}
+{#                <div class="container">#}
+{#                <div class="heading">#}
+{#                        <img class="heading-img" src="{% static 'ordering system/images/heading_logo.png' %}" alt="">#}
+{#                        <h2>Our Story</h2>#}
+{#                </div>#}
+{##}
+{#                <div class="row">#}
+{#                        <div class="col-md-6">#}
+{#                                <p class="mb-30">Maecenas fermentum tortor id fringilla molestie. In hac habitasse#}
+{#                                        platea dictumst. Morbi maximus#}
+{#                                        lobortis ipsum, ut blandit augue ullamcorper vitae.#}
+{#                                        Nulla dignissim leo felis, eget cursus elit aliquet ut. Curabitur vel convallis#}
+{#                                        massa. Morbi tellus#}
+{#                                        tortor, luctus et lacinia non, tincidunt in lacus.#}
+{#                                        Vivamus sed ligula imperdiet, feugiat magna vitae, blandit ex. Vestibulum id#}
+{#                                        dapibus dolor, ac#}
+{#                                        cursus nulla. </p>#}
+{#                        </div><!-- col-md-6 -->#}
+{##}
+{#                        <div class="col-md-6">#}
+{#                                <p class="mb-30">Maecenas fermentum tortor id fringilla molestie. In hac habitasse platea#}
+{#                                        dictumst.Morbi maximus lobortis ipsum, ut blandit augue ullamcorper vitae.#}
+{#                                        Nulla dignissim leo felis, eget cursus elit aliquet ut. Curabitur vel#}
+{#                                        convallismassa. Morbi tellus tortor, luctus et lacinia non, tincidunt in lacus.#}
+{#                                        Vivamus sed ligula imperdiet, feugiat magna vitae, blandit ex. Vestibulumidda#}
+{#                                        pibus dolor, accursus nulla. </p>#}
+{#                        </div><!-- col-md-6 -->#}
+{#                </div><!-- row -->#}
+{#        </div><!-- container -->#}
+{##}
+{#                <h6 class="center-text mt-40 mt-sm-20 mb-30"><a href="#" class="btn-primaryc plr-25"><b>SEE TODAYS MENU</b></a></h6>#}
+{#        </div><!-- container -->#}
+{#</section>#}
+
+
+{#<section>#}
+{#        <div class="container">#}
+{#                <div class="heading">#}
+{#                        <img class="heading-img" src="{% static 'ordering system/images/heading_logo.png' %}" alt="">#}
+{#                        <h2>Our Menu</h2>#}
+{#                </div>#}
+{##}
+{#                <div class="row">#}
+{#                        <div class="col-sm-12">#}
+{#                                <ul class="selecton brdr-b-primary mb-70">#}
+{#                                        <li><a class="active" href="#" data-select="*"><b>ALL</b></a></li>#}
+{#                                        <li><a href="#" data-select="pizza"><b>PIZZA</b></a></li>#}
+{#                                        <li><a href="#" data-select="pasta"><b>PASTA</b></a></li>#}
+{#                                        <li><a href="#" data-select="salads"><b>SALADS</b></a></li>#}
+{#                                        <li><a href="#" data-select="deserts"><b>DESERTS</b></a></li>#}
+{#                                </ul>#}
+{#                        </div><!--col-sm-12-->#}
+{#                </div><!--row-->#}
+{##}
+{#                <div class="row">#}
+{#                        <div class="col-md-6 food-menu pizza">#}
+{#                                <div class="sided-90x mb-30 ">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-1-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Pizza Margherita</b><b class="color-primary float-right">$12.00</b></h5>#}
+{#                                                <p class="pr-70">Maecenas fermentum tortor id fringilla molestie. In hac habitasse platea dictumst. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{##}
+{#                        <div class="col-md-6 food-menu pizza pasta">#}
+{#                                <div class="sided-90x mb-30 ">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-2-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Italian pasta</b><b class="color-primary float-right">$20.00</b></h5>#}
+{#                                                <p class="pr-70">Proin dictum viverra varius. Etiam vulputate libero dui, at pretium elit elementum quis. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{##}
+{#                        <div class="col-md-6 food-menu pasta">#}
+{#                                <div class="sided-90x mb-30 ">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-3-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Pizza Prosciuto</b><b class="color-primary float-right">$12.00</b></h5>#}
+{#                                                <p class="pr-70">Maecenas fermentum tortor id fringilla molestie. In hac habitasse platea dictumst. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{##}
+{#                        <div class="col-md-6 food-menu salads">#}
+{#                                <div class="sided-90x mb-30">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-4-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Broschettas</b><b class="color-primary float-right">$6.00</b></h5>#}
+{#                                                <p class="pr-70">Proin dictum viverra varius. Etiam vulputate libero dui, at pretium elit elementum quis. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{#                        <div class="col-md-6 food-menu deserts">#}
+{#                                <div class="sided-90x mb-30">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-5-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Pizza Margherita</b><b class="color-primary float-right">$12.00</b></h5>#}
+{#                                                <p class="pr-70">Maecenas fermentum tortor id fringilla molestie. In hac habitasse platea dictumst. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{##}
+{#                        <div class="col-md-6 food-menu pizza">#}
+{#                                <div class="sided-90x mb-30 ">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-6-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Italian pasta</b><b class="color-primary float-right">$20.00</b></h5>#}
+{#                                                <p class="pr-70">Proin dictum viverra varius. Etiam vulputate libero dui, at pretium elit elementum quis. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{##}
+{#                        <div class="col-md-6 food-menu deserts">#}
+{#                                <div class="sided-90x mb-30">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-7-120x120.jpg"  alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Pizza Prosciuto</b><b class="color-primary float-right">$12.00</b></h5>#}
+{#                                                <p class="pr-70">Maecenas fermentum tortor id fringilla  molestie. In hac habitasse platea dictumst. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{##}
+{#                        <div class="col-md-6 food-menu pasta">#}
+{#                                <div class="sided-90x mb-30 ">#}
+{#                                        <div class="s-left"><img class="br-3" src="images/menu-8-120x120.jpg" alt="Menu Image"></div><!--s-left-->#}
+{#                                        <div class="s-right">#}
+{#                                                <h5 class="mb-10"><b>Broschettas</b><b class="color-primary float-right">$6.00</b></h5>#}
+{#                                                <p class="pr-70">Proin dictum viverra varius. Etiam vulputate libero dui, at pretium elit elementum quis. </p>#}
+{#                                        </div><!--s-right-->#}
+{#                                </div><!-- sided-90x -->#}
+{#                        </div><!-- food-menu -->#}
+{#                </div><!-- row -->#}
+{##}
+{#                <h6 class="center-text mt-40 mt-sm-20 mb-30"><a href="#" class="btn-primaryc plr-25"><b>SEE TODAYS MENU</b></a></h6>#}
+{#        </div><!-- container -->#}
+{##}
+{#</section>#}
+
+{% endblock content %}
